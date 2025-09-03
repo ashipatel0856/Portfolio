@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {FiMenu,FiX} from 'react-icons/fi';
 import { FaGithub,FaLinkedin } from 'react-icons/fa';
 
 const Navbar = () => {
-  
   const [isOpen , setIsOpen] =useState(false)
   const [activeSection ,setActiveSection] = useState("");
   const [isScrolled,setisScrolled] = useState(false) 
@@ -12,9 +11,10 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       setisScrolled(window.scrollY >50);
-    }
+    };
+
     window.addEventListener('scroll',handleScroll);
-    return () => window.removeEventListener('scroll',handleScroll)
+    return () => window.removeEventListener('scroll',handleScroll);
 
   },[])
   const handleMenuItemsClick = (sectionId) =>{
@@ -46,7 +46,7 @@ const Navbar = () => {
           </div>
           
           {/* destop menu */}
-          <ul className ='md: flex space-x-8 text-gray-300'>
+          <ul className ='hidden md:flex space-x-8 text-gray-300'>
             {menuItems.map((item) => (
               <li key={item.id} className='cursor-pointer hover:text-[#8245ec] ${
               activeSection === item.id ? "text-[#8245ec]": ""
@@ -55,7 +55,78 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
-                </div>
+
+          {/* social media icons */}
+          <div className="hidden md:flex space-x-4">
+            <a href="https://github.com/ashishpatel0856"
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-gray-300 hover:text-[#8245ec]'
+            > 
+            <FaGithub size ={24}/>
+            </a>
+
+            <a href="https://www.linkedin.com/in/ashish-kumar-28a572304"
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-gray-300 hover:text-[#8245ec]'
+            > 
+            <FaLinkedin size ={24}/>
+            </a>
+          </div>
+
+          {/* mobile menu icons */}
+
+          <div className='md:hidden'>
+            {
+              isOpen ?(
+                <FiX className='text-3xl text-[#8245ec] cusor-pointer'
+                onClick={() => setIsOpen(false) }/>
+              ) : (
+                <FiMenu className='text -3xl text-[#8245ec] cursor-pointer'
+                onClick = {() => setIsOpen(true)} />
+              )
+            }
+          </div>
+        </div>
+
+        {/* mobiles menu items */}
+           {isOpen && (
+        <div className="absolute top-16 left-1/2 transform -translate-x-1/2 w-4/5 bg-[#050414] bg-opacity-50 backdrop-filter backdrop-blur-lg z-50 rounded-lg shadow-lg md:hidden">
+          <ul className="flex flex-col items-center space-y-4 py-4 text-gray-300">
+            {menuItems.map((item) => (
+              <li
+                key={item.id}
+                className={`cursor-pointer hover:text-white ${
+                  activeSection === item.id ? "text-[#8245ec]" : ""
+                }`}
+              >
+                <button onClick={() => handleMenuItemClick(item.id)}>
+                  {item.label}
+                </button>
+              </li>
+            ))}
+            <div className="flex space-x-4">
+              <a
+                href="https://github.com/codingmastr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-white"
+              >
+                <FaGithub size={24} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/tarun-kaushik-553b441a4"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-white"
+              >
+                <FaLinkedin size={24} />
+              </a>
+            </div>
+          </ul>
+        </div>
+      )}
 
     </nav>
   )
